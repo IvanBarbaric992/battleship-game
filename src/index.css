@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ocean: hsl(210 100% 45%);
+  --color-water: hsl(195 100% 85%);
+  --color-hit: hsl(0 84% 55%);
+  --color-miss: hsl(210 15% 65%);
+  --color-ship: hsl(220 13% 35%);
+  --color-ship-hit: hsl(15 85% 50%);
+  --color-ship-sunk: hsl(220 13% 20%);
+}
