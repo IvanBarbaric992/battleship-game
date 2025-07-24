@@ -1,8 +1,7 @@
-import { BOARD_SIZE } from '@/lib/constants';
+import { BOARD_SIZE } from '@/shared/config/constants';
+import type { CellState, ShipType } from '@/shared/lib/types';
 
 import shipsData from '../data/ships.json';
-
-import type { CellState, ShipType } from './types';
 
 export const createInitialBoard = (): CellState[][] => {
   const board: CellState[][] = Array(BOARD_SIZE)

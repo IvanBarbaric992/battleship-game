@@ -1,10 +1,8 @@
 import { Fragment } from 'react';
 
-import { COLUMN_LABELS, ROW_LABELS } from '@/lib/constants';
-
-import type { CellState } from '../lib/types';
-
-import Cell from './Cell';
+import { COLUMN_LABELS, ROW_LABELS } from '@/shared/config/constants';
+import type { CellState } from '@/shared/lib/types';
+import { Cell } from '@/shared/ui';
 
 interface GameBoardProps {
   board: CellState[][];

@@ -222,7 +222,6 @@ export default tseslint.config(
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       yoda: 'error',
 
-      // Import rules for better organization (2025 standards)
       'import/order': [
         'error',
         {
@@ -261,7 +260,7 @@ export default tseslint.config(
       ],
       'import/no-unresolved': 'error',
       'import/no-duplicates': 'error',
-      'import/no-unused-modules': 'off', // Can be slow, enable if needed
+      'import/no-unused-modules': 'off',
       'import/no-deprecated': 'warn',
       'import/newline-after-import': 'error',
       'import/no-anonymous-default-export': 'warn',

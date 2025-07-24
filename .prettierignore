@@ -1,14 +1,6 @@
 dist/
 build/
 node_modules/
-coverage/
 .vite/
-*.min.js
-*.bundle.js
 pnpm-lock.yaml
-package-lock.json
-yarn.lock
 .env
-.env.local
-.env.production
-.env.development

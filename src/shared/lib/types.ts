@@ -1,5 +1,3 @@
-export const BOARD_SIZE = 10;
-
 export type ShipType = 'carrier' | 'battleship' | 'cruiser' | 'submarine' | 'destroyer';
 
 export interface CellState {

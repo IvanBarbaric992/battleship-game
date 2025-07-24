@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { COLUMN_LABELS, EMOJI } from '@/lib/constants';
+import { COLUMN_LABELS, EMOJI } from '@/shared/config/constants';
 
 import type { CellState } from '../lib/types';
 import { cn } from '../lib/utils';
