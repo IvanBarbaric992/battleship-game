@@ -21,7 +21,7 @@ const useBattleshipGame = () => {
 
   const gameWon = useMemo(() => sunkShips.length === shipsData.layout.length, [sunkShips]);
 
-  const handleCellClick = useCallback(
+  const handleShotClick = useCallback(
     (x: number, y: number) => {
       const cell = board[y][x];
 
@@ -62,7 +62,7 @@ const useBattleshipGame = () => {
     hits,
     sunkShips,
     gameWon,
-    handleCellClick,
+    handleShotClick,
     resetGame,
   };
 };

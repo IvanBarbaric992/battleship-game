@@ -8,7 +8,7 @@ import shipsData from './data/ships.json';
 import useBattleshipGame from './lib/useBattleshipGame';
 
 const App = () => {
-  const { board, shots, hits, gameWon, sunkShips, handleCellClick, resetGame } =
+  const { board, shots, hits, gameWon, sunkShips, handleShotClick, resetGame } =
     useBattleshipGame();
 
   const accuracy = useMemo(() => (shots > 0 ? Math.round((hits / shots) * 100) : 0), [shots, hits]);
@@ -62,7 +62,7 @@ const App = () => {
                 New Game
               </Button>
             </div>
-            <GameBoard board={board} disabled={gameWon} onCellClick={handleCellClick} />
+            <GameBoard board={board} disabled={gameWon} onCellClick={handleShotClick} />
           </div>
         </div>
 
