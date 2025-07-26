@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from 'react';
+import { type CSSProperties, type ReactNode, useCallback } from 'react';
 
 import { createPortal } from 'react-dom';
 
@@ -23,19 +23,21 @@ const Modal = ({
 }: ModalProps) => {
   const { shouldRender, isAnimating } = useAnimateModal({ isOpen });
 
-  const modalRef = useClickAway(() => {
+  const handleClickAway = useCallback(() => {
     if (closeOnBackdropClick && isOpen) {
       onClose();
     }
-  });
+  }, [closeOnBackdropClick, isOpen, onClose]);
 
-  useKeyPressClose(isOpen ? onClose : null);
+  const modalRef = useClickAway(handleClickAway);
+
+  useKeyPressClose(shouldRender ? onClose : null);
 
   if (!shouldRender) {
     return null;
   }
 
-  const portalElement = document.getElementById('modal-portal');
+  const portalElement = document.querySelector('#modal-portal');
   if (!portalElement) {
     return null;
   }

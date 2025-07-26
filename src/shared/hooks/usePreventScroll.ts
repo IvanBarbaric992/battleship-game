@@ -16,7 +16,7 @@ const usePreventScroll = () => {
   });
 
   useEffect(() => {
-    const dialogPortal = document.getElementById('dialog-portal');
+    const dialogPortal = document.getElementById('modal-portal');
     if (!dialogPortal) {
       return;
     }

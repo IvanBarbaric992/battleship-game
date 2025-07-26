@@ -15,9 +15,7 @@ const VictoryModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (gameWon) {
-      setIsOpen(true);
-    }
+    setIsOpen(gameWon);
   }, [gameWon]);
 
   const handleClose = () => {
