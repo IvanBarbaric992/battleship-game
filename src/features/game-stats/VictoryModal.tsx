@@ -32,16 +32,20 @@ const VictoryModal = () => {
       >
         <div className='text-center'>
           <div className='mb-4 text-6xl'>🏆</div>
-          <h2 className='mb-4 text-3xl font-bold text-green-600'>Victory!</h2>
-          <p className='mb-4 text-lg text-gray-700'>
+          <h2 className='mb-4 text-3xl font-extrabold text-victory-600'>Victory!</h2>
+          <p className='mb-4 text-lg font-medium text-ship-600'>
             Congratulations! You have successfully destroyed all enemy ships!
           </p>
-          <div className='rounded-lg bg-green-50 p-4'>
-            <p className='text-green-800'>
-              <span className='font-semibold'>Shots fired:</span> {shots}
+          <div
+            className={`
+              rounded-xl border border-victory-100 bg-victory-50 p-4 shadow-md
+            `}
+          >
+            <p className='font-semibold text-victory-800'>
+              <span className='font-extrabold'>Shots fired:</span> {shots}
             </p>
-            <p className='text-green-800'>
-              <span className='font-semibold'>Accuracy:</span> {accuracy}%
+            <p className='font-semibold text-victory-800'>
+              <span className='font-extrabold'>Accuracy:</span> {accuracy}%
             </p>
           </div>
         </div>

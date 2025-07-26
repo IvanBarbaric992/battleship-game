@@ -18,21 +18,21 @@ const BattleStats = () => {
         sm:grid-cols-4
       `}
     >
-      <div className='rounded-lg bg-white p-4 text-center shadow'>
-        <div className='text-2xl font-bold text-blue-600'>{shots}</div>
-        <div className='text-sm text-gray-600'>Shots</div>
+      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
+        <div className='text-2xl font-extrabold text-ocean-600'>{shots}</div>
+        <div className='text-sm font-medium text-ship-600'>Shots</div>
       </div>
-      <div className='rounded-lg bg-white p-4 text-center shadow'>
-        <div className='text-2xl font-bold text-red-600'>{hits}</div>
-        <div className='text-sm text-gray-600'>Hits</div>
+      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
+        <div className='text-2xl font-extrabold text-hit-400'>{hits}</div>
+        <div className='text-sm font-medium text-ship-600'>Hits</div>
       </div>
-      <div className='rounded-lg bg-white p-4 text-center shadow'>
-        <div className='text-2xl font-bold text-green-600'>{accuracy}%</div>
-        <div className='text-sm text-gray-600'>Accuracy</div>
+      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
+        <div className='text-2xl font-extrabold text-victory-600'>{accuracy}%</div>
+        <div className='text-sm font-medium text-ship-600'>Accuracy</div>
       </div>
-      <div className='rounded-lg bg-white p-4 text-center shadow'>
-        <div className='text-2xl font-bold text-purple-600'>{sunkShips.length}/5</div>
-        <div className='text-sm text-gray-600'>Ships Sunk</div>
+      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
+        <div className='text-2xl font-extrabold text-ship-800'>{sunkShips.length}/5</div>
+        <div className='text-sm font-medium text-ship-600'>Ships Sunk</div>
       </div>
     </div>
   );

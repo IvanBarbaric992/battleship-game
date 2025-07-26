@@ -13,19 +13,20 @@ const Button = ({ className, variant = 'primary', size = 'md', ...props }: Butto
     type='button'
     className={cn(
       `
-        inline-flex items-center justify-center rounded-md font-medium
-        transition-colors
+        inline-flex items-center justify-center rounded-lg font-semibold
+        shadow-md transition-colors duration-200
       `,
       `
-        focus-visible:ring-2 focus-visible:outline-none
+        focus-visible:outline-2 focus-visible:outline-offset-2
+        focus-visible:outline-ocean-500 focus-visible:outline-none
         disabled:pointer-events-none disabled:opacity-50
       `,
       {
-        'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
-        'bg-gray-200 text-gray-900 hover:bg-gray-300': variant === 'secondary',
-        'bg-red-600 text-white hover:bg-red-700': variant === 'destructive',
+        'bg-ocean-500 text-white hover:bg-ocean-600 active:bg-ocean-700': variant === 'primary',
+        'bg-ship-200 text-ship-800 hover:bg-ship-100 active:bg-ship-400': variant === 'secondary',
+        'bg-hit-400 text-white hover:bg-hit-500 active:bg-hit-500': variant === 'destructive',
         'h-8 px-3 text-sm': size === 'sm',
-        'h-10 px-4': size === 'md',
+        'h-10 px-4 text-base': size === 'md',
         'h-12 px-6 text-lg': size === 'lg',
       },
       className,

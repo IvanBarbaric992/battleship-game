@@ -7,8 +7,8 @@ const ShipFleet = () => {
   const sunkShips = useBattleshipSunkShips();
 
   return (
-    <div className='mt-8 rounded-lg bg-white p-6 shadow'>
-      <h3 className='mb-4 text-center text-lg font-bold text-gray-800'>Fleet Status</h3>
+    <div className='mt-8 rounded-xl bg-white p-6 shadow-md'>
+      <h3 className='mb-4 text-center text-lg font-extrabold text-ocean-800'>Fleet Status</h3>
       <div
         className={`
           grid grid-cols-1 gap-3
@@ -24,11 +24,11 @@ const ShipFleet = () => {
             <div
               key={name}
               className={`
-                rounded border p-3 text-center
+                rounded-lg border p-3 text-center transition-all duration-200
                 ${
                   isShipSunk
-                    ? 'border-red-300 bg-red-50 text-red-800'
-                    : 'border-blue-300 bg-blue-50 text-blue-800'
+                    ? 'border-hit-200 bg-hit-50 text-hit-500'
+                    : 'border-water-300 bg-water-50 text-ocean-700'
                 }
               `}
             >
@@ -37,15 +37,15 @@ const ShipFleet = () => {
                   alt={name}
                   src={shipIcon}
                   className={`
-                    h-10 w-10 object-contain
+                    h-10 w-10 object-contain transition-all duration-200
                     sm:h-14 sm:w-14
                     ${isShipSunk ? 'opacity-50 grayscale' : ''}
                   `}
                 />
               </div>
-              <div className='font-medium capitalize'>{name}</div>
-              <div className='text-sm'>Size: {size}</div>
-              <div className='text-xs'>{isShipSunk ? 'SUNK' : 'ACTIVE'}</div>
+              <div className='font-semibold capitalize'>{name}</div>
+              <div className='text-sm font-medium'>Size: {size}</div>
+              <div className='text-xs font-extrabold'>{isShipSunk ? 'SUNK' : 'ACTIVE'}</div>
             </div>
           );
         })}

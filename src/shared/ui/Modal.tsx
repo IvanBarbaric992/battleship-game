@@ -67,7 +67,7 @@ const Modal = ({
         className={`
           relative w-full max-w-md transform
           [animation:var(--modal-animation)]
-          rounded-lg bg-white p-6 shadow-xl
+          rounded-2xl bg-white p-6 shadow-2xl
         `}
         style={
           {

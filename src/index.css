@@ -1,22 +1,65 @@
 @import 'tailwindcss';
 
-@theme {
-  --color-ocean: hsl(210 100% 45%);
-  --color-water: hsl(195 100% 85%);
-  --color-hit: hsl(0 84% 55%);
-  --color-miss: hsl(210 15% 65%);
-  --color-ship: hsl(220 13% 35%);
-  --color-ship-hit: hsl(15 85% 50%);
-  --color-ship-sunk: hsl(220 13% 20%);
+/* Custom Inter font integration */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+@theme {
+  /* Custom Game Colors */
+  --color-ocean-50: hsl(210 100% 95%);
+  --color-ocean-100: hsl(210 100% 90%);
+  --color-ocean-200: hsl(210 100% 80%);
+  --color-ocean-300: hsl(210 100% 70%);
+  --color-ocean-400: hsl(210 100% 60%);
+  --color-ocean-500: hsl(210 100% 45%);
+  --color-ocean-600: hsl(210 100% 35%);
+  --color-ocean-700: hsl(210 100% 25%);
+  --color-ocean-800: hsl(210 100% 15%);
+  --color-ocean-900: hsl(210 100% 10%);
+
+  --color-water-50: hsl(195 100% 97%);
+  --color-water-100: hsl(195 100% 92%);
+  --color-water-200: hsl(195 100% 85%);
+  --color-water-300: hsl(195 100% 75%);
+  --color-water-400: hsl(195 100% 65%);
+
+  --color-hit-50: hsl(0 84% 95%);
+  --color-hit-100: hsl(0 84% 85%);
+  --color-hit-200: hsl(0 84% 75%);
+  --color-hit-400: hsl(0 84% 55%);
+  --color-hit-500: hsl(0 84% 45%);
+
+  --color-miss-50: hsl(210 15% 95%);
+  --color-miss-100: hsl(210 15% 85%);
+  --color-miss-200: hsl(210 15% 75%);
+  --color-miss-400: hsl(210 15% 65%);
+  --color-miss-500: hsl(210 15% 55%);
+
+  --color-ship-100: hsl(220 13% 55%);
+  --color-ship-200: hsl(220 13% 45%);
+  --color-ship-400: hsl(220 13% 35%);
+  --color-ship-600: hsl(220 13% 25%);
+  --color-ship-800: hsl(220 13% 20%);
+
+  --color-victory-50: hsl(142 76% 95%);
+  --color-victory-100: hsl(142 76% 85%);
+  --color-victory-600: hsl(142 76% 45%);
+  --color-victory-800: hsl(142 76% 25%);
+
+  /* Custom Font Family */
+  --font-family-primary: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Custom breakpoint for mobile */
   --breakpoint-xxs: 320px;
-  --breakpoint-xs: 480px;
+}
+
+html {
+  font-family: var(--font-family-primary);
 }
 
 @keyframes modal-enter {
   from {
     opacity: 0;
-    transform: scale(0.9) translateY(-10px);
+    transform: scale(0.95) translateY(-8px);
   }
   to {
     opacity: 1;
@@ -31,7 +74,7 @@
   }
   to {
     opacity: 0;
-    transform: scale(0.9) translateY(-10px);
+    transform: scale(0.95) translateY(-8px);
   }
 }
 
@@ -53,18 +96,33 @@
   }
 }
 
-.modal-enter {
-  animation: modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+@keyframes cell-hit {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-.modal-exit {
-  animation: modal-exit 0.2s cubic-bezier(0.4, 0, 1, 1);
+@keyframes ship-sink {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(0.95) rotate(-2deg);
+  }
 }
 
-.backdrop-enter {
-  animation: backdrop-enter 0.3s ease-out;
+.cell-hit-animation {
+  animation: cell-hit 150ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.backdrop-exit {
-  animation: backdrop-exit 0.2s ease-in;
+.ship-sink-animation {
+  animation: ship-sink 300ms ease-in-out;
 }

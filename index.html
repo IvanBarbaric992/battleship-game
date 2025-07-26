@@ -6,11 +6,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
     <link rel="icon" type="image/svg+xml" href="/battleship.ico" />
-    <title>Battleship Game</title>
+    <meta
+      name="description"
+      content="Modern Battleship game built with React, TypeScript & Tailwind CSS"
+    />
+    <meta name="theme-color" content="#2563eb" />
+
+    <title>⚓ Battleship Game</title>
   </head>
   <body>
     <div id="root"></div>

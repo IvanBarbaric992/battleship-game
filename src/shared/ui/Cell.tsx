@@ -31,15 +31,15 @@ const Cell = ({ state, x, y }: CellProps) => {
 
   const getCellStyle = () => {
     if (state.isShipSunk ?? false) {
-      return 'bg-red-400';
+      return 'bg-hit-500 ship-sink-animation';
     }
     if (state.isHit && state.hasShip) {
-      return 'bg-red-200';
+      return 'bg-hit-200 cell-hit-animation';
     }
     if (state.isHit && !state.hasShip) {
-      return 'bg-gray-200';
+      return 'bg-miss-200';
     }
-    return gameWon ? 'bg-blue-200' : 'bg-blue-200 hover:bg-blue-300';
+    return gameWon ? 'bg-water-200' : 'bg-water-200 hover:bg-water-300';
   };
 
   return (
@@ -49,17 +49,22 @@ const Cell = ({ state, x, y }: CellProps) => {
       type='button'
       className={cn(
         `
-          aspect-square h-7 w-7 border border-gray-400 text-xs transition-all
-          duration-200
-          sm:h-9 sm:w-9 sm:text-sm
-          md:h-10 md:w-10 md:text-base
-          lg:h-12 lg:w-12 lg:text-lg
+          aspect-square rounded-md border border-ship-400 text-xs font-semibold
+          shadow-sm transition-all duration-200
+          sm:text-sm
+          md:text-base
+          lg:text-lg
         `,
         `
           flex cursor-crosshair items-center justify-center leading-none
-          font-medium
           ${gameWon ? '' : 'hover:scale-105'}
           disabled:cursor-not-allowed disabled:hover:scale-100
+        `,
+        `
+          h-7 w-7
+          sm:h-9 sm:w-9
+          md:h-10 md:w-10
+          lg:h-12 lg:w-12
         `,
         getCellStyle(),
       )}
