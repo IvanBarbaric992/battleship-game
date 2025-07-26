@@ -1,5 +1,5 @@
 import BattleField from '@/features/game-controls/BattleField';
-import { BattleStats, VictoryBanner } from '@/features/game-stats';
+import { BattleStats, VictoryModal } from '@/features/game-stats';
 import GameInstructions from '@/widgets/game-board/GameInstructions';
 import ShipFleet from '@/widgets/ship-fleet/ShipFleet';
 
@@ -18,20 +18,12 @@ const GamePage = () => (
         <p className='text-lg text-blue-700'>Hunt down the enemy fleet!</p>
       </header>
 
-      <VictoryBanner />
+      <VictoryModal />
 
-      <div
-        className={`
-          grid grid-cols-1 gap-8
-          lg:grid-cols-3
-        `}
-      >
-        <div className='lg:col-span-2'>
-          <BattleField />
-        </div>
-
-        <div className='space-y-6'>
+      <div className={`col-span-full`}>
+        <div className='mt-2 space-y-6'>
           <BattleStats />
+          <BattleField />
           <ShipFleet />
           <GameInstructions />
         </div>

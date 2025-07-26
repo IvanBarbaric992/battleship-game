@@ -1,15 +1,11 @@
-import {
-  useBattleshipActions,
-  useBattleshipBoard,
-  useBattleshipGameWon,
-} from '@/entities/board/store';
+import { useBattleshipActions, useBattleshipBoard } from '@/entities/board/store';
 import { Button } from '@/shared/ui';
 import GameBoard from '@/widgets/game-board/GameBoard';
 
 const BattleField = () => {
   const board = useBattleshipBoard();
-  const gameWon = useBattleshipGameWon();
-  const { fireShot, resetGame } = useBattleshipActions();
+
+  const { resetGame } = useBattleshipActions();
 
   return (
     <div className='mb-6 flex justify-center'>
@@ -20,7 +16,7 @@ const BattleField = () => {
             New Game
           </Button>
         </div>
-        <GameBoard board={board} disabled={gameWon} onCellClick={fireShot} />
+        <GameBoard board={board} />
       </div>
     </div>
   );

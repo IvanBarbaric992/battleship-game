@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { useBattleshipActions, useBattleshipGameWon } from '@/entities/board/store';
 import { COLUMN_LABELS, EMOJI } from '@/shared/config/constants';
 
 import type { CellState } from '../lib/types';
@@ -9,11 +10,12 @@ interface CellProps {
   state: CellState;
   x: number;
   y: number;
-  onClick: (x: number, y: number) => void;
-  disabled?: boolean;
 }
 
-const Cell = ({ state, x, y, onClick, disabled }: CellProps) => {
+const Cell = ({ state, x, y }: CellProps) => {
+  const { fireShot } = useBattleshipActions();
+  const gameWon = useBattleshipGameWon();
+
   const getCellContent = () => {
     if (state.isShipSunk ?? false) {
       return EMOJI.SUNK;
@@ -37,12 +39,12 @@ const Cell = ({ state, x, y, onClick, disabled }: CellProps) => {
     if (state.isHit && !state.hasShip) {
       return 'bg-gray-200';
     }
-    return 'bg-blue-200 hover:bg-blue-300';
+    return gameWon ? 'bg-blue-200' : 'bg-blue-200 hover:bg-blue-300';
   };
 
   return (
     <button
-      disabled={Boolean(disabled) || state.isHit}
+      disabled={Boolean(gameWon) || state.isHit}
       title={state.isHit ? '' : `Fire at ${COLUMN_LABELS[x]}${(y + 1).toString()}`}
       type='button'
       className={cn(
@@ -56,13 +58,13 @@ const Cell = ({ state, x, y, onClick, disabled }: CellProps) => {
         `
           flex cursor-crosshair items-center justify-center leading-none
           font-medium
-          hover:scale-105
+          ${gameWon ? '' : 'hover:scale-105'}
           disabled:cursor-not-allowed disabled:hover:scale-100
         `,
         getCellStyle(),
       )}
       onClick={() => {
-        onClick(x, y);
+        fireShot(x, y);
       }}
     >
       <span className='flex h-full w-full items-center justify-center'>{getCellContent()}</span>

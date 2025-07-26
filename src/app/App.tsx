@@ -1,5 +1,10 @@
 import GamePage from '@/pages/GamePage';
+import { usePreventScroll } from '@/shared/hooks';
 
-const App = () => <GamePage />;
+const App = () => {
+  usePreventScroll();
+
+  return <GamePage />;
+};
 
 export default App;

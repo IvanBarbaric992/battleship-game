@@ -6,11 +6,9 @@ import { Cell } from '@/shared/ui';
 
 interface GameBoardProps {
   board: CellState[][];
-  onCellClick: (x: number, y: number) => void;
-  disabled?: boolean;
 }
 
-const GameBoard = ({ board, onCellClick, disabled }: GameBoardProps) => (
+const GameBoard = ({ board }: GameBoardProps) => (
   <div className='inline-block'>
     <div
       className={`
@@ -53,14 +51,7 @@ const GameBoard = ({ board, onCellClick, disabled }: GameBoardProps) => (
             {ROW_LABELS[y]}
           </div>
           {row.map((cellState, x) => (
-            <Cell
-              key={`${COLUMN_LABELS[x]}${ROW_LABELS[y]}`}
-              disabled={disabled}
-              state={cellState}
-              x={x}
-              y={y}
-              onClick={onCellClick}
-            />
+            <Cell key={`${COLUMN_LABELS[x]}${ROW_LABELS[y]}`} state={cellState} x={x} y={y} />
           ))}
         </Fragment>
       ))}

@@ -50,7 +50,6 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
 
       if (cell.hasShip && cell.shipType) {
         if (isShipCompletelyHit(cell.shipType, newBoard)) {
-          // Mark all ship cells as sunk immutably
           const shipPositions =
             shipsData.layout.find(s => s.ship === cell.shipType)?.positions ?? [];
           shipPositions.forEach(([sx, sy]) => {
