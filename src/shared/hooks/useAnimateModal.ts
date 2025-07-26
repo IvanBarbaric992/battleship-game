@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 interface UseAnimateModalProps {
   isOpen: boolean;
@@ -8,27 +8,33 @@ interface UseAnimateModalProps {
 const ANIMATION_DURATION = 200;
 
 const useAnimateModal = ({ isOpen, duration = ANIMATION_DURATION }: UseAnimateModalProps) => {
-  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !shouldRender) {
       setShouldRender(true);
+
       startTransition(() => {
         setIsAnimating(true);
       });
-    } else if (shouldRender) {
+    } else if (!isOpen && shouldRender && !isPending) {
       setIsAnimating(false);
-      const timer = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setShouldRender(false);
       }, duration);
+
       return () => {
-        clearTimeout(timer);
+        clearTimeout(timeout);
       };
     }
-  }, [isOpen, shouldRender, duration]);
+  }, [isOpen, shouldRender, duration, isPending]);
 
-  return { shouldRender, isAnimating };
+  return {
+    shouldRender,
+    isAnimating: isAnimating || isPending,
+  };
 };
 
 export default useAnimateModal;

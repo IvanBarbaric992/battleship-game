@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import {
   useBattleshipAccuracy,
@@ -13,31 +13,16 @@ const VictoryModal = () => {
   const shots = useBattleshipShots();
   const accuracy = useBattleshipAccuracy();
   const [isOpen, setIsOpen] = useState(false);
-  const hasTriggeredRef = useRef(false);
 
   useEffect(() => {
-    if (gameWon && !hasTriggeredRef.current) {
-      hasTriggeredRef.current = true;
+    if (gameWon) {
       setIsOpen(true);
-    }
-  }, [gameWon]);
-
-  // Reset trigger when game is reset (gameWon becomes false)
-  useEffect(() => {
-    if (!gameWon && hasTriggeredRef.current) {
-      hasTriggeredRef.current = false;
-      setIsOpen(false);
     }
   }, [gameWon]);
 
   const handleClose = () => {
     setIsOpen(false);
   };
-
-  // Don't render anything if game hasn't been won yet
-  if (!hasTriggeredRef.current) {
-    return null;
-  }
 
   return (
     <Suspense fallback={null}>
