@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import { useBattleshipActions, useBattleshipGameWon } from '@/entities/board/store';
-import { COLUMN_LABELS, EMOJI } from '@/shared/config/constants';
+import { BATTLE_ICONS, COLUMN_LABELS } from '@/shared/config/constants';
 
 import type { CellState } from '../shared/lib/types';
 import { cn } from '../shared/lib/utils';
@@ -18,13 +18,27 @@ const Cell = ({ state, x, y }: CellProps) => {
 
   const getCellContent = () => {
     if (state.isShipSunk ?? false) {
-      return EMOJI.SUNK;
+      return (
+        <img
+          alt='Ship sunk'
+          className='h-full w-full rounded-md object-contain'
+          src={BATTLE_ICONS.SUNK}
+        />
+      );
     }
     if (state.isHit && state.hasShip) {
-      return EMOJI.HIT;
+      return (
+        <img alt='Hit' className='h-full w-full rounded-md object-contain' src={BATTLE_ICONS.HIT} />
+      );
     }
     if (state.isHit && !state.hasShip) {
-      return EMOJI.MISS;
+      return (
+        <img
+          alt='Miss'
+          className={`h-full w-full rounded-md object-contain`}
+          src={BATTLE_ICONS.MISS}
+        />
+      );
     }
     return '';
   };

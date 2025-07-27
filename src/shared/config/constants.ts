@@ -6,10 +6,10 @@ export const SHIP_ICONS: Record<string, string> = {
   destroyer: '/Aircraft Shape.png',
 };
 
-export const EMOJI = {
-  SUNK: '💥',
-  HIT: '🔥',
-  MISS: '💧',
+export const BATTLE_ICONS = {
+  SUNK: '/Hit.png',
+  HIT: '/Hit small.png',
+  MISS: '/Miss small.png',
 } as const;
 
 export const BOARD_SIZE = 10;
