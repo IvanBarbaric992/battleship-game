@@ -1,10 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 
-/* Custom Inter font integration */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 @theme {
-  /* Custom Game Colors */
   --color-ocean-50: hsl(210 100% 95%);
   --color-ocean-100: hsl(210 100% 90%);
   --color-ocean-200: hsl(210 100% 80%);
@@ -45,10 +42,8 @@
   --color-victory-600: hsl(142 76% 45%);
   --color-victory-800: hsl(142 76% 25%);
 
-  /* Custom Font Family */
   --font-family-primary: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* Custom breakpoint for mobile */
   --breakpoint-xxs: 320px;
 }
 

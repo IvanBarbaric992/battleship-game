@@ -1,10 +1,8 @@
-import { useBattleshipActions, useBattleshipBoard } from '@/entities/board/store';
+import { useBattleshipActions } from '@/entities/board/store';
 import { Button } from '@/shared/ui';
 import GameBoard from '@/widgets/game-board/GameBoard';
 
 const BattleField = () => {
-  const board = useBattleshipBoard();
-
   const { resetGame } = useBattleshipActions();
 
   return (
@@ -16,7 +14,7 @@ const BattleField = () => {
             New Game
           </Button>
         </div>
-        <GameBoard board={board} />
+        <GameBoard />
       </div>
     </div>
   );

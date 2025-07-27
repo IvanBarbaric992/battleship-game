@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import {
   useBattleshipAccuracy,
   useBattleshipHits,
@@ -38,4 +40,4 @@ const BattleStats = () => {
   );
 };
 
-export default BattleStats;
+export default memo(BattleStats);

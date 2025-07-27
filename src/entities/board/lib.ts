@@ -34,7 +34,7 @@ export const getShipPositions = (shipType: string) =>
 export const markShipAsSunk = (shipType: string, newBoard: CellState[][]) => {
   const shipPositions = getShipPositions(shipType);
   shipPositions.forEach(([sx, sy]) => {
-    newBoard[sy][sx].isShipSunk = true;
+    newBoard[sy][sx] = { ...newBoard[sy][sx], isShipSunk: true };
   });
 };
 

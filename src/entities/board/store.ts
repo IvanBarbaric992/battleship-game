@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import type { CellState } from '../../shared/lib/types';
 import shipsData from '../data/ships.json';
 
-import { createInitialBoard, isShipCompletelyHit } from './lib';
+import { createInitialBoard, isShipCompletelyHit, markShipAsSunk } from './lib';
 
 interface BattleshipState {
   board: CellState[][];
@@ -50,16 +50,12 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
 
       if (cell.hasShip && cell.shipType) {
         if (isShipCompletelyHit(cell.shipType, newBoard)) {
-          const shipPositions =
-            shipsData.layout.find(s => s.ship === cell.shipType)?.positions ?? [];
-          shipPositions.forEach(([sx, sy]) => {
-            newBoard[sy][sx] = { ...newBoard[sy][sx], isShipSunk: true };
-          });
+          markShipAsSunk(cell.shipType, newBoard);
         }
       }
 
       const newSunkShips = shipsData.layout
-        .filter(({ positions }) => positions.every(([sx, sy]) => newBoard[sy][sx].isHit))
+        .filter(({ ship }) => isShipCompletelyHit(ship, newBoard))
         .map(s => s.ship);
 
       const newGameWon = newSunkShips.length === shipsData.layout.length;
@@ -79,15 +75,10 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
     },
 
     resetGame: () => {
-      const newInitialState = {
+      set({
+        ...initialState,
         board: createInitialBoard(),
-        shots: 0,
-        hits: 0,
-        accuracy: 0,
-        gameWon: false,
-        sunkShips: [],
-      };
-      set(newInitialState);
+      });
     },
   },
 }));
