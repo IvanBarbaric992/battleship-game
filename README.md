@@ -1,69 +1,63 @@
-# React + TypeScript + Vite
+# ⚓ Battleship Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern take on the classic naval strategy game built with React and TypeScript. Hunt down enemy ships on a 10x10 grid with an intuitive click-to-fire interface.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Responsive Design** - Plays great on mobile and desktop
+- **Modern UI** - Clean interface with smooth animations
+- **Game Statistics** - Track shots fired, hits, and accuracy
+- **Fleet Status** - Visual ship status with damage indicators
+- **Victory Celebration** - Modal with game results
+- **Random Ship Placement** - Fixed or randomized fleet layouts
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4** - Modern styling with custom design system
+- **Zustand** - Lightweight state management
+- **Vite** - Fast development and build tool
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+```bash
+# Install dependencies
+pnpm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) to play the game.
 
-```js
-// eslint.config.js
-import reactDom from 'eslint-plugin-react-dom';
-import reactX from 'eslint-plugin-react-x';
+## How to Play
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+1. Click any cell on the grid to fire a shot
+2. 🔥 = Hit an enemy ship
+3. 💧 = Miss (hit water)
+4. 💥 = Ship completely destroyed
+5. Sink all 5 ships to win!
+
+## Project Structure
+
 ```
+src/
+├── features/           # Game features
+│   ├── battle-field/   # Game board and controls
+│   ├── game-stats/     # Statistics and victory modal
+│   ├── game-instructions/ # How to play
+│   └── ship-fleet/     # Fleet status display
+├── entities/           # Business logic
+│   └── board/          # Game state and ship data
+├── shared/             # Reusable components
+│   ├── ui/            # UI components
+│   ├── config/        # Constants
+│   └── lib/           # Utilities and types
+└── pages/             # Page components
+```
+
+Built with modern web technologies for a smooth gaming experience.
