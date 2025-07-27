@@ -6,6 +6,7 @@ import {
   useBattleshipShots,
   useBattleshipSunkShips,
 } from '@/entities/board/store';
+import StatCard from '@/shared/ui/StatCard';
 
 const BattleStats = () => {
   const shots = useBattleshipShots();
@@ -20,22 +21,14 @@ const BattleStats = () => {
         sm:grid-cols-4
       `}
     >
-      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
-        <div className='text-2xl font-extrabold text-ocean-600'>{shots}</div>
-        <div className='text-sm font-medium text-ship-600'>Shots</div>
-      </div>
-      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
-        <div className='text-2xl font-extrabold text-hit-400'>{hits}</div>
-        <div className='text-sm font-medium text-ship-600'>Hits</div>
-      </div>
-      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
-        <div className='text-2xl font-extrabold text-victory-600'>{accuracy}%</div>
-        <div className='text-sm font-medium text-ship-600'>Accuracy</div>
-      </div>
-      <div className='rounded-xl bg-white p-4 text-center shadow-md'>
-        <div className='text-2xl font-extrabold text-ship-800'>{sunkShips.length}/5</div>
-        <div className='text-sm font-medium text-ship-600'>Ships Sunk</div>
-      </div>
+      <StatCard colorClass='text-ocean-600' label='Shots' value={shots} />
+      <StatCard colorClass='text-hit-400' label='Hits' value={hits} />
+      <StatCard colorClass='text-victory-600' label='Accuracy' value={`${accuracy.toString()}%`} />
+      <StatCard
+        colorClass='text-ship-800'
+        label='Ships Sunk'
+        value={`${sunkShips.length.toString()}/5`}
+      />
     </div>
   );
 };
