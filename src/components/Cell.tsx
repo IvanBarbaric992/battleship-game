@@ -3,8 +3,8 @@ import { memo } from 'react';
 import { useBattleshipActions, useBattleshipGameWon } from '@/entities/board/store';
 import { COLUMN_LABELS, EMOJI } from '@/shared/config/constants';
 
-import type { CellState } from '../lib/types';
-import { cn } from '../lib/utils';
+import type { CellState } from '../shared/lib/types';
+import { cn } from '../shared/lib/utils';
 
 interface CellProps {
   state: CellState;
@@ -61,9 +61,9 @@ const Cell = ({ state, x, y }: CellProps) => {
           disabled:cursor-not-allowed disabled:hover:scale-100
         `,
         `
-          h-8 w-8
-          sm:h-10 sm:w-10
-          md:h-11 md:w-11
+          h-7 w-7
+          sm:h-9 sm:w-9
+          md:h-10 md:w-10
           lg:h-12 lg:w-12
         `,
         getCellStyle(),

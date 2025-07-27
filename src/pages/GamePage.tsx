@@ -1,7 +1,7 @@
-import BattleField from '@/features/game-controls/BattleField';
+import { BattleField } from '@/features/battle-field';
+import GameInstructions from '@/features/game-instructions';
 import { BattleStats, VictoryModal } from '@/features/game-stats';
-import GameInstructions from '@/widgets/game-board/GameInstructions';
-import ShipFleet from '@/widgets/ship-fleet/ShipFleet';
+import ShipFleet from '@/features/ship-fleet';
 
 const GamePage = () => (
   <div className='min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4'>

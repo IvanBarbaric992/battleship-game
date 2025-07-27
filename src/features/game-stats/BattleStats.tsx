@@ -1,12 +1,12 @@
 import { memo } from 'react';
 
+import StatCard from '@/components/StatCard';
 import {
   useBattleshipAccuracy,
   useBattleshipHits,
   useBattleshipShots,
   useBattleshipSunkShips,
 } from '@/entities/board/store';
-import StatCard from '@/shared/ui/StatCard';
 
 const BattleStats = () => {
   const shots = useBattleshipShots();

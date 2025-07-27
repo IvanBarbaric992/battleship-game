@@ -6,7 +6,7 @@ import {
   useBattleshipShots,
 } from '@/entities/board/store';
 
-const Modal = lazy(async () => await import('@/shared/ui/Modal'));
+const Modal = lazy(async () => await import('@/components/Modal'));
 
 const VictoryModal = () => {
   const gameWon = useBattleshipGameWon();
