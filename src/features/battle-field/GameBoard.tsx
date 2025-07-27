@@ -11,9 +11,10 @@ const GameBoard = () => {
     <div className='inline-block'>
       <div
         className={`
-          mb-2 grid grid-cols-11 gap-1
-          sm:gap-1.5
-          md:gap-2
+          mb-2 grid grid-cols-12 gap-1
+          xxs:gap-1.5
+          sm:gap-2
+          md:gap-3
         `}
       >
         <div />

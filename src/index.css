@@ -44,7 +44,7 @@
 
   --font-family-primary: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --breakpoint-xxs: 320px;
+  --breakpoint-xxs: 20rem;
 }
 
 html {

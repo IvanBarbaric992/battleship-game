@@ -61,10 +61,11 @@ const Cell = ({ state, x, y }: CellProps) => {
           disabled:cursor-not-allowed disabled:hover:scale-100
         `,
         `
-          h-7 w-7
-          sm:h-9 sm:w-9
-          md:h-10 md:w-10
-          lg:h-12 lg:w-12
+          size-5
+          xxs:size-6
+          sm:size-9
+          md:size-10
+          lg:size-12
         `,
         getCellStyle(),
       )}
@@ -72,7 +73,7 @@ const Cell = ({ state, x, y }: CellProps) => {
         fireShot(x, y);
       }}
     >
-      <span className='flex h-full w-full items-center justify-center'>{getCellContent()}</span>
+      <span className='flex size-full items-center justify-center'>{getCellContent()}</span>
     </button>
   );
 };
