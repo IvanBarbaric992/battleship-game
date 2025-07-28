@@ -1,0 +1,11 @@
+{
+  "build": {
+    "env": {
+      "NODE_VERSION": "22"
+    }
+  },
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
+  "outputDirectory": "dist"
+}

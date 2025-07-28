@@ -37,10 +37,26 @@ Open [http://localhost:5173](http://localhost:5173) to play the game.
 ## How to Play
 
 1. Click any cell on the grid to fire a shot
-2. 🔥 = Hit an enemy ship
+2. 🎯 = Hit an enemy ship
 3. 💧 = Miss (hit water)
 4. 💥 = Ship completely destroyed
 5. Sink all 5 ships to win!
+
+## Deployment
+
+### Recommended: Vercel
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign up
+3. Import your GitHub repository
+4. Deploy automatically!
+
+### Alternative Options
+
+- **Netlify** - Drag & drop or Git integration
+- **GitHub Pages** - Free hosting directly from GitHub
+- **Railway** - Modern platform with generous free tier
+- **Surge.sh** - Simple CLI deployment
 
 ## Project Structure
 
