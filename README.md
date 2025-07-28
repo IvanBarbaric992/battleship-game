@@ -9,7 +9,7 @@ A modern take on the classic naval strategy game built with React and TypeScript
 - **Game Statistics** - Track shots fired, hits, and accuracy
 - **Fleet Status** - Visual ship status with damage indicators
 - **Victory Celebration** - Modal with game results
-- **Random Ship Placement** - Fixed or randomized fleet layouts
+- **Fixed Ship Placement** - Fixed fleet layouts
 
 ## Tech Stack
 
