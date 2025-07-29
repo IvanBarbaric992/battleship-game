@@ -1,3 +1,4 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
 
 import type { CellState } from '../../shared/lib/types';
@@ -33,54 +34,41 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
     fireShot: (x: number, y: number) => {
       const currentState = get();
       const { board, gameWon, sunkShips: currentSunkShips } = currentState;
-      const cell = board[y][x];
 
-      if (cell.isHit || gameWon) {
+      const cellSnapshot = { ...board[y][x] };
+
+      if (cellSnapshot.isHit || gameWon) {
         return;
       }
 
-      const isHit = cell.hasShip;
+      const isHit = cellSnapshot.hasShip;
       const newShots = currentState.shots + 1;
       const newHits = currentState.hits + (isHit ? 1 : 0);
       const newAccuracy = newShots > 0 ? Math.round((newHits / newShots) * 100) : 0;
 
-      const newBoard = board.map((row, rowIndex) => {
-        if (rowIndex === y) {
-          return row.map((cellState, colIndex) => {
-            if (colIndex === x) {
-              return { ...cellState, isHit: true };
+      const updatedState = produce(currentState, draft => {
+        draft.board[y][x].isHit = true;
+
+        draft.shots = newShots;
+        draft.hits = newHits;
+        draft.accuracy = newAccuracy;
+
+        if (cellSnapshot.hasShip && cellSnapshot.shipType) {
+          const isCurrentShipSunk = isShipCompletelyHit(cellSnapshot.shipType, draft.board);
+
+          if (isCurrentShipSunk) {
+            draft.board = markShipAsSunk(cellSnapshot.shipType, draft.board);
+
+            if (!currentSunkShips.includes(cellSnapshot.shipType)) {
+              draft.sunkShips.push(cellSnapshot.shipType);
             }
-            return cellState;
-          });
+          }
         }
-        return row;
+
+        draft.gameWon = draft.sunkShips.length === getTotalShipsCount();
       });
 
-      let finalBoard = newBoard;
-      let isCurrentShipSunk = false;
-
-      if (cell.hasShip && cell.shipType) {
-        isCurrentShipSunk = isShipCompletelyHit(cell.shipType, newBoard);
-        if (isCurrentShipSunk) {
-          finalBoard = markShipAsSunk(cell.shipType, newBoard);
-        }
-      }
-
-      const newSunkShips =
-        isCurrentShipSunk && cell.shipType && !currentSunkShips.includes(cell.shipType)
-          ? [...currentSunkShips, cell.shipType]
-          : currentSunkShips;
-
-      const newGameWon = newSunkShips.length === getTotalShipsCount();
-
-      set(() => ({
-        board: finalBoard,
-        shots: newShots,
-        hits: newHits,
-        accuracy: newAccuracy,
-        sunkShips: newSunkShips,
-        gameWon: newGameWon,
-      }));
+      set(updatedState);
     },
 
     resetGame: () => {
