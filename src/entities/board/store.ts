@@ -31,12 +31,18 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
 
   actions: {
     fireShot: (x: number, y: number) => {
-      const { board, gameWon } = get();
+      const currentState = get();
+      const { board, gameWon, sunkShips: currentSunkShips } = currentState;
       const cell = board[y][x];
 
       if (cell.isHit || gameWon) {
         return;
       }
+
+      const isHit = cell.hasShip;
+      const newShots = currentState.shots + 1;
+      const newHits = currentState.hits + (isHit ? 1 : 0);
+      const newAccuracy = newShots > 0 ? Math.round((newHits / newShots) * 100) : 0;
 
       const newBoard = board.map((row, rowIndex) => {
         if (rowIndex === y) {
@@ -60,17 +66,12 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
         }
       }
 
-      const currentSunkShips = get().sunkShips;
       const newSunkShips =
         isCurrentShipSunk && cell.shipType && !currentSunkShips.includes(cell.shipType)
           ? [...currentSunkShips, cell.shipType]
           : currentSunkShips;
 
       const newGameWon = newSunkShips.length === getTotalShipsCount();
-      const currentState = get();
-      const newShots = currentState.shots + 1;
-      const newHits = currentState.hits + (cell.hasShip ? 1 : 0);
-      const newAccuracy = newShots > 0 ? Math.round((newHits / newShots) * 100) : 0;
 
       set(() => ({
         board: finalBoard,

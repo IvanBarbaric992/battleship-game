@@ -4,16 +4,12 @@ import type { CellState, ShipType } from '@/shared/lib/types';
 import shipsData from '../data/ships.json';
 
 export const createInitialBoard = (): CellState[][] => {
-  const board: CellState[][] = Array(BOARD_SIZE)
-    .fill(null)
-    .map(() =>
-      Array(BOARD_SIZE)
-        .fill(null)
-        .map(() => ({
-          isHit: false,
-          hasShip: false,
-        })),
-    );
+  const board: CellState[][] = Array.from({ length: BOARD_SIZE }, () =>
+    Array.from({ length: BOARD_SIZE }, () => ({
+      isHit: false,
+      hasShip: false,
+    })),
+  );
 
   shipsData.layout.forEach(({ ship, positions }) => {
     positions.forEach(([x, y]) => {
