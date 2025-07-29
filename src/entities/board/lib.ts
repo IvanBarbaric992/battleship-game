@@ -28,14 +28,39 @@ export const createInitialBoard = (): CellState[][] => {
   return board;
 };
 
-export const getShipPositions = (shipType: string) =>
-  shipsData.layout.find(s => s.ship === shipType)?.positions ?? [];
+const shipPositionsCache = new Map<string, number[][]>();
+const shipPositionSetsCache = new Map<string, Set<string>>();
+const allShipTypes = shipsData.layout.map(({ ship }) => ship);
+const totalShipsCount = shipsData.layout.length;
 
-export const markShipAsSunk = (shipType: string, newBoard: CellState[][]) => {
-  const shipPositions = getShipPositions(shipType);
-  shipPositions.forEach(([sx, sy]) => {
-    newBoard[sy][sx] = { ...newBoard[sy][sx], isShipSunk: true };
-  });
+shipsData.layout.forEach(({ ship, positions }) => {
+  shipPositionsCache.set(ship, positions);
+  shipPositionSetsCache.set(
+    ship,
+    new Set(positions.map(([x, y]) => `${x.toString()},${y.toString()}`)),
+  );
+});
+
+export const getShipPositions = (shipType: string): number[][] =>
+  shipPositionsCache.get(shipType) ?? [];
+
+export const getShipPositionSet = (shipType: string): Set<string> =>
+  shipPositionSetsCache.get(shipType) ?? new Set();
+
+export const getAllShipTypes = (): string[] => allShipTypes;
+export const getTotalShipsCount = (): number => totalShipsCount;
+
+export const markShipAsSunk = (shipType: string, board: CellState[][]): CellState[][] => {
+  const positionSet = getShipPositionSet(shipType);
+
+  return board.map((row, rowIndex) =>
+    row.map((cell, colIndex) => {
+      if (positionSet.has(`${colIndex.toString()},${rowIndex.toString()}`)) {
+        return { ...cell, isShipSunk: true };
+      }
+      return cell;
+    }),
+  );
 };
 
 export const isShipCompletelyHit = (shipType: string, newBoard: CellState[][]): boolean => {

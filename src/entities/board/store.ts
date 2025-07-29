@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 
 import type { CellState } from '../../shared/lib/types';
-import shipsData from '../data/ships.json';
 
-import { createInitialBoard, isShipCompletelyHit, markShipAsSunk } from './lib';
+import { createInitialBoard, getTotalShipsCount, isShipCompletelyHit, markShipAsSunk } from './lib';
 
 interface BattleshipState {
   board: CellState[][];
@@ -39,33 +38,42 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
         return;
       }
 
-      const newBoard = board.map((row, rowIndex) =>
-        row.map((cellState, colIndex) => {
-          if (rowIndex === y && colIndex === x) {
-            return { ...cellState, isHit: true };
-          }
-          return cellState;
-        }),
-      );
+      const newBoard = board.map((row, rowIndex) => {
+        if (rowIndex === y) {
+          return row.map((cellState, colIndex) => {
+            if (colIndex === x) {
+              return { ...cellState, isHit: true };
+            }
+            return cellState;
+          });
+        }
+        return row;
+      });
+
+      let finalBoard = newBoard;
+      let isCurrentShipSunk = false;
 
       if (cell.hasShip && cell.shipType) {
-        if (isShipCompletelyHit(cell.shipType, newBoard)) {
-          markShipAsSunk(cell.shipType, newBoard);
+        isCurrentShipSunk = isShipCompletelyHit(cell.shipType, newBoard);
+        if (isCurrentShipSunk) {
+          finalBoard = markShipAsSunk(cell.shipType, newBoard);
         }
       }
 
-      const newSunkShips = shipsData.layout
-        .filter(({ ship }) => isShipCompletelyHit(ship, newBoard))
-        .map(s => s.ship);
+      const currentSunkShips = get().sunkShips;
+      const newSunkShips =
+        isCurrentShipSunk && cell.shipType && !currentSunkShips.includes(cell.shipType)
+          ? [...currentSunkShips, cell.shipType]
+          : currentSunkShips;
 
-      const newGameWon = newSunkShips.length === shipsData.layout.length;
+      const newGameWon = newSunkShips.length === getTotalShipsCount();
       const currentState = get();
       const newShots = currentState.shots + 1;
       const newHits = currentState.hits + (cell.hasShip ? 1 : 0);
       const newAccuracy = newShots > 0 ? Math.round((newHits / newShots) * 100) : 0;
 
       set(() => ({
-        board: newBoard,
+        board: finalBoard,
         shots: newShots,
         hits: newHits,
         accuracy: newAccuracy,

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 
 import { Cell } from '@/components';
 import { useBattleshipBoard } from '@/entities/board/store';
@@ -60,4 +60,4 @@ const GameBoard = () => {
   );
 };
 
-export default GameBoard;
+export default memo(GameBoard);
