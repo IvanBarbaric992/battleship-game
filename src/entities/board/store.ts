@@ -1,9 +1,17 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { produce } from 'immer';
 import { create } from 'zustand';
 
 import type { CellState } from '../../shared/lib/types';
 
-import { createInitialBoard, getTotalShipsCount, isShipCompletelyHit, markShipAsSunk } from './lib';
+import {
+  calculateAccuracy,
+  createInitialBoard,
+  getTotalShipsCount,
+  isShipCompletelyHit,
+  isValidCoordinate,
+  markShipAsSunkMutation,
+} from './lib';
 
 interface BattleshipState {
   board: CellState[][];
@@ -32,8 +40,13 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
 
   actions: {
     fireShot: (x: number, y: number) => {
+      if (!isValidCoordinate(x, y)) {
+        console.warn(`Invalid coordinates: ${x}, ${y}`);
+        return;
+      }
+
       const currentState = get();
-      const { board, gameWon, sunkShips: currentSunkShips } = currentState;
+      const { board, gameWon, sunkShips } = currentState;
 
       const cellSnapshot = { ...board[y][x] };
 
@@ -41,25 +54,23 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
         return;
       }
 
-      const isHit = cellSnapshot.hasShip;
-      const newShots = currentState.shots + 1;
-      const newHits = currentState.hits + (isHit ? 1 : 0);
-      const newAccuracy = newShots > 0 ? Math.round((newHits / newShots) * 100) : 0;
-
       const updatedState = produce(currentState, draft => {
         draft.board[y][x].isHit = true;
 
-        draft.shots = newShots;
-        draft.hits = newHits;
-        draft.accuracy = newAccuracy;
+        const isHit = cellSnapshot.hasShip;
+        draft.shots += 1;
+        if (isHit) {
+          draft.hits += 1;
+        }
+        draft.accuracy = calculateAccuracy(draft.hits, draft.shots);
 
         if (cellSnapshot.hasShip && cellSnapshot.shipType) {
           const isCurrentShipSunk = isShipCompletelyHit(cellSnapshot.shipType, draft.board);
 
           if (isCurrentShipSunk) {
-            draft.board = markShipAsSunk(cellSnapshot.shipType, draft.board);
+            markShipAsSunkMutation(cellSnapshot.shipType, draft.board);
 
-            if (!currentSunkShips.includes(cellSnapshot.shipType)) {
+            if (!sunkShips.includes(cellSnapshot.shipType)) {
               draft.sunkShips.push(cellSnapshot.shipType);
             }
           }
@@ -80,10 +91,11 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
   },
 }));
 
-export const useBattleshipBoard = () => useBattleshipStore(state => state.board);
-export const useBattleshipShots = () => useBattleshipStore(state => state.shots);
-export const useBattleshipHits = () => useBattleshipStore(state => state.hits);
-export const useBattleshipAccuracy = () => useBattleshipStore(state => state.accuracy);
-export const useBattleshipGameWon = () => useBattleshipStore(state => state.gameWon);
-export const useBattleshipSunkShips = () => useBattleshipStore(state => state.sunkShips);
+export const useBattleshipBoard = (): CellState[][] => useBattleshipStore(state => state.board);
+export const useBattleshipShots = (): number => useBattleshipStore(state => state.shots);
+export const useBattleshipHits = (): number => useBattleshipStore(state => state.hits);
+export const useBattleshipAccuracy = (): number => useBattleshipStore(state => state.accuracy);
+export const useBattleshipGameWon = (): boolean => useBattleshipStore(state => state.gameWon);
+export const useBattleshipSunkShips = (): readonly string[] =>
+  useBattleshipStore(state => state.sunkShips);
 export const useBattleshipActions = () => useBattleshipStore(state => state.actions);
