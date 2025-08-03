@@ -16,3 +16,9 @@ export const BOARD_SIZE = 10;
 
 export const COLUMN_LABELS = 'ABCDEFGHIJ'.split('');
 export const ROW_LABELS = Array.from({ length: BOARD_SIZE }, (_, i) => (i + 1).toString());
+
+export const PLACEMENT_PREFERENCES = {
+  VERTICAL_PROBABILITY: 0.6,
+  HORIZONTAL_PROBABILITY: 0.4,
+  MAX_PLACEMENT_ATTEMPTS: 100,
+} as const;

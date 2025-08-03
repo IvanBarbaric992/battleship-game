@@ -6,7 +6,9 @@ import type { CellState } from '../../shared/lib/types';
 
 import {
   calculateAccuracy,
-  createInitialBoard,
+  clearRandomShipCache,
+  createFixedShipsBoard,
+  createRandomShipsBoard,
   getTotalShipsCount,
   isShipCompletelyHit,
   isValidCoordinate,
@@ -20,19 +22,21 @@ interface BattleshipState {
   accuracy: number;
   gameWon: boolean;
   sunkShips: string[];
+  isRandomLayout: boolean;
   actions: {
     fireShot: (x: number, y: number) => void;
-    resetGame: () => void;
+    resetGame: (isRandomLayout?: boolean) => void;
   };
 }
 
 const initialState = {
-  board: createInitialBoard(),
+  board: createFixedShipsBoard(),
   shots: 0,
   hits: 0,
   accuracy: 0,
   gameWon: false,
   sunkShips: [],
+  isRandomLayout: false,
 };
 
 export const useBattleshipStore = create<BattleshipState>((set, get) => ({
@@ -82,10 +86,14 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
       set(updatedState);
     },
 
-    resetGame: () => {
+    resetGame: (isRandomLayout = false) => {
+      clearRandomShipCache();
+      const newBoard = isRandomLayout ? createRandomShipsBoard() : createFixedShipsBoard();
+
       set({
         ...initialState,
-        board: createInitialBoard(),
+        board: newBoard,
+        isRandomLayout,
       });
     },
   },
@@ -98,4 +106,6 @@ export const useBattleshipAccuracy = (): number => useBattleshipStore(state => s
 export const useBattleshipGameWon = (): boolean => useBattleshipStore(state => state.gameWon);
 export const useBattleshipSunkShips = (): readonly string[] =>
   useBattleshipStore(state => state.sunkShips);
+export const useBattleshipIsRandomLayout = (): boolean =>
+  useBattleshipStore(state => state.isRandomLayout);
 export const useBattleshipActions = () => useBattleshipStore(state => state.actions);

@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 
+import { LayoutSwitcher } from '@/components';
 import {
   useBattleshipAccuracy,
   useBattleshipGameWon,
@@ -12,6 +13,7 @@ const VictoryModal = () => {
   const gameWon = useBattleshipGameWon();
   const shots = useBattleshipShots();
   const accuracy = useBattleshipAccuracy();
+
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -47,6 +49,10 @@ const VictoryModal = () => {
             <p className='font-semibold text-victory-800'>
               <span className='font-extrabold'>Accuracy:</span> {accuracy}%
             </p>
+          </div>
+
+          <div className='mt-6'>
+            <LayoutSwitcher />
           </div>
         </div>
       </Modal>
