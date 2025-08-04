@@ -21,3 +21,10 @@ export interface GameState {
   hits: number;
   gameWon: boolean;
 }
+
+export const ShipDirection = {
+  HORIZONTAL: 'horizontal',
+  VERTICAL: 'vertical',
+} as const;
+
+export type ShipDirection = (typeof ShipDirection)[keyof typeof ShipDirection];
