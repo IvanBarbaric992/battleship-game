@@ -39,19 +39,15 @@ const createBoardWithShips = (
 export const createFixedShipsBoard = (): CellState[][] => createBoardWithShips(shipsData.layout);
 
 const shipPositionsCache = new Map<string, readonly number[][]>();
-const allShipTypes = Object.freeze(shipsData.layout.map(({ ship }) => ship));
-const totalShipsCount = shipsData.layout.length;
 
 const updateShipCache = (shipLayout: { ship: string; positions: number[][] }[]): void => {
   shipPositionsCache.clear();
 
-  // Populate cache with new positions
   shipLayout.forEach(({ ship, positions }) => {
     shipPositionsCache.set(ship, Object.freeze(positions as [number, number][]));
   });
 };
 
-// Initialize with fixed layout
 updateShipCache(shipsData.layout);
 
 const calculateShipPositions = (
@@ -80,7 +76,6 @@ export const isShipPlacementValid = (
 ): boolean => {
   const positions = calculateShipPositions(startX, startY, length, direction);
 
-  // Check if all positions are valid coordinates
   for (const [x, y] of positions) {
     if (!isValidCoordinate(x, y)) {
       return false;
@@ -149,7 +144,6 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
       if (isShipPlacementValid(startX, startY, size, direction, occupiedCells)) {
         const positions = calculateShipPositions(startX, startY, size, direction);
 
-        // Add positions to occupied cells
         positions.forEach(([x, y]) => {
           occupiedCells.add(`${x},${y}`);
         });
@@ -173,7 +167,6 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
 };
 
 export const createRandomShipsBoard = (): CellState[][] => {
-  // Clear cache and generate new layout
   shipLayoutCache = null;
   const shipLayout = generateRandomShipLayout();
   return createBoardWithShips(shipLayout);
@@ -185,9 +178,7 @@ export const createBoard = (isRandomLayout: boolean): CellState[][] =>
 export const getShipPositions = (shipType: string): readonly number[][] =>
   shipPositionsCache.get(shipType) ?? Object.freeze([]);
 
-export const getAllShipTypes = (): readonly string[] => allShipTypes;
-
-export const getTotalShipsCount = (): number => totalShipsCount;
+export const getTotalShipsCount = (): number => shipsData.layout.length;
 
 export const markShipAsSunk = (shipType: string, draft: CellState[][]): void => {
   const positions = getShipPositions(shipType);
