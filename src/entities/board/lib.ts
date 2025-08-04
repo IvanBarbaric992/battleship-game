@@ -189,7 +189,7 @@ export const getAllShipTypes = (): readonly string[] => allShipTypes;
 
 export const getTotalShipsCount = (): number => totalShipsCount;
 
-export const markShipAsSunkMutation = (shipType: string, draft: CellState[][]): void => {
+export const markShipAsSunk = (shipType: string, draft: CellState[][]): void => {
   const positions = getShipPositions(shipType);
 
   for (const [x, y] of positions) {
