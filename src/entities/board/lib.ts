@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { BOARD_SIZE, PLACEMENT_PREFERENCES } from '@/shared/config/constants';
+import { BOARD_SIZE, MAX_RETRIES, PLACEMENT_PREFERENCES } from '@/shared/config/constants';
 import { ShipDirection, type CellState, type ShipType } from '@/shared/lib/types';
 
 import shipsData from '../data/ships.json';
@@ -156,7 +156,9 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
     }
 
     if (!placed) {
-      // Recursive retry if placement failed
+      if (attempts >= MAX_RETRIES) {
+        throw new Error('Failed to place ships after maximum retries');
+      }
       shipLayoutCache = null;
       return generateRandomShipLayout();
     }

@@ -22,3 +22,5 @@ export const PLACEMENT_PREFERENCES = {
   HORIZONTAL_PROBABILITY: 0.4,
   MAX_PLACEMENT_ATTEMPTS: 100,
 } as const;
+
+export const MAX_RETRIES = 10;
