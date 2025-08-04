@@ -4,9 +4,9 @@ import { ShipDirection, type CellState, type ShipType } from '@/shared/lib/types
 
 import shipsData from '../data/ships.json';
 
-export const createEmptyBoard = (): CellState[][] =>
-  Array.from({ length: BOARD_SIZE }, () =>
-    Array.from({ length: BOARD_SIZE }, () => ({
+export const createEmptyBoard = (boardSize: number = BOARD_SIZE): CellState[][] =>
+  Array.from({ length: boardSize }, () =>
+    Array.from({ length: boardSize }, () => ({
       isHit: false,
       hasShip: false,
     })),
@@ -29,14 +29,16 @@ const placeShipsOnBoard = (
 
 const createBoardWithShips = (
   shipLayout: { ship: string; positions: number[][] }[],
+  boardSize: number = BOARD_SIZE,
 ): CellState[][] => {
-  const board = createEmptyBoard();
+  const board = createEmptyBoard(boardSize);
   updateShipCache(shipLayout);
   placeShipsOnBoard(board, shipLayout);
   return board;
 };
 
-export const createFixedShipsBoard = (): CellState[][] => createBoardWithShips(shipsData.layout);
+export const createFixedShipsBoard = (boardSize: number = BOARD_SIZE): CellState[][] =>
+  createBoardWithShips(shipsData.layout, boardSize);
 
 const shipPositionsCache = new Map<string, readonly number[][]>();
 
@@ -73,11 +75,12 @@ const isShipPlacementValid = (
   length: number,
   direction: ShipDirection,
   occupiedCells: Set<string>,
+  boardSize: number = BOARD_SIZE,
 ): boolean => {
   const positions = calculateShipPositions(startX, startY, length, direction);
 
   for (const [x, y] of positions) {
-    if (!isValidCoordinate(x, y)) {
+    if (!isValidCoordinate(x, y, boardSize)) {
       return false;
     }
   }
@@ -94,7 +97,10 @@ const isShipPlacementValid = (
         const checkX = x + dx;
         const checkY = y + dy;
 
-        if (isValidCoordinate(checkX, checkY) && occupiedCells.has(`${checkX},${checkY}`)) {
+        if (
+          isValidCoordinate(checkX, checkY, boardSize) &&
+          occupiedCells.has(`${checkX},${checkY}`)
+        ) {
           return false;
         }
       }
@@ -111,7 +117,7 @@ interface RandomPlacedShip {
 
 let shipLayoutCache: RandomPlacedShip[] | null = null;
 
-export const generateRandomShipLayout = (): RandomPlacedShip[] => {
+export const generateRandomShipLayout = (boardSize: number = BOARD_SIZE): RandomPlacedShip[] => {
   if (shipLayoutCache) {
     return shipLayoutCache;
   }
@@ -134,14 +140,13 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
           ? ShipDirection.VERTICAL
           : ShipDirection.HORIZONTAL;
       const startX = Math.floor(
-        Math.random() *
-          (direction === ShipDirection.HORIZONTAL ? BOARD_SIZE - size + 1 : BOARD_SIZE),
+        Math.random() * (direction === ShipDirection.HORIZONTAL ? boardSize - size + 1 : boardSize),
       );
       const startY = Math.floor(
-        Math.random() * (direction === ShipDirection.VERTICAL ? BOARD_SIZE - size + 1 : BOARD_SIZE),
+        Math.random() * (direction === ShipDirection.VERTICAL ? boardSize - size + 1 : boardSize),
       );
 
-      if (isShipPlacementValid(startX, startY, size, direction, occupiedCells)) {
+      if (isShipPlacementValid(startX, startY, size, direction, occupiedCells, boardSize)) {
         const positions = calculateShipPositions(startX, startY, size, direction);
 
         positions.forEach(([x, y]) => {
@@ -160,7 +165,7 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
         throw new Error('Failed to place ships after maximum retries');
       }
       shipLayoutCache = null;
-      return generateRandomShipLayout();
+      return generateRandomShipLayout(boardSize);
     }
   }
 
@@ -168,10 +173,13 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
   return ships;
 };
 
-export const createBoard = (isRandomLayout: boolean): CellState[][] => {
+export const createBoard = (
+  isRandomLayout: boolean,
+  boardSize: number = BOARD_SIZE,
+): CellState[][] => {
   shipLayoutCache = null;
-  const shipLayout = isRandomLayout ? generateRandomShipLayout() : shipsData.layout;
-  return createBoardWithShips(shipLayout);
+  const shipLayout = isRandomLayout ? generateRandomShipLayout(boardSize) : shipsData.layout;
+  return createBoardWithShips(shipLayout, boardSize);
 };
 
 const getShipPositions = (shipType: string): readonly number[][] =>
@@ -198,8 +206,8 @@ export const isShipCompletelyHit = (shipType: string, board: CellState[][]): boo
   return true;
 };
 
-export const isValidCoordinate = (x: number, y: number): boolean =>
-  x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-
 export const calculateAccuracy = (hits: number, shots: number): number =>
   shots > 0 ? Math.round((hits / shots) * 100) : 0;
+
+export const isValidCoordinate = (x: number, y: number, boardSize: number = BOARD_SIZE): boolean =>
+  x >= 0 && x < boardSize && y >= 0 && y < boardSize;

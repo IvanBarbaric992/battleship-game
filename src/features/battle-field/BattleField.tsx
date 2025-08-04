@@ -1,5 +1,3 @@
-import { LayoutSwitcher } from '@/components';
-
 import GameBoard from './GameBoard';
 
 const BattleField = () => (
@@ -12,7 +10,6 @@ const BattleField = () => (
     >
       <div className='mb-4 flex flex-col items-center justify-center gap-4'>
         <h2 className='text-xl font-extrabold text-ocean-800'>Battle Grid</h2>
-        <LayoutSwitcher />
       </div>
       <GameBoard />
     </div>

@@ -9,7 +9,6 @@ import {
   createBoard,
   getTotalShipsCount,
   isShipCompletelyHit,
-  isValidCoordinate,
   markShipAsSunk,
 } from './lib';
 
@@ -21,9 +20,11 @@ interface BattleshipState {
   gameWon: boolean;
   sunkShips: string[];
   isRandomLayout: boolean;
+  gameMode: 'easy' | 'hard';
   actions: {
     fireShot: (x: number, y: number) => void;
     resetGame: (isRandomLayout?: boolean) => void;
+    setGameMode: (mode: 'easy' | 'hard') => void;
   };
 }
 
@@ -35,21 +36,22 @@ const initialState = {
   gameWon: false,
   sunkShips: [],
   isRandomLayout: false,
+  gameMode: 'easy' as 'easy' | 'hard',
 };
 
 export const useBattleshipStore = create<BattleshipState>((set, get) => ({
   ...initialState,
-  board: createBoard(false),
+  board: createBoard(false, 10),
 
   actions: {
     fireShot: (x: number, y: number) => {
-      if (!isValidCoordinate(x, y)) {
+      const currentState = get();
+      const { board, gameWon, sunkShips } = currentState;
+
+      if (x < 0 || x >= board[0].length || y < 0 || y >= board.length) {
         console.warn(`Invalid coordinates: ${x}, ${y}`);
         return;
       }
-
-      const currentState = get();
-      const { board, gameWon, sunkShips } = currentState;
 
       const cellSnapshot = { ...board[y][x] };
 
@@ -86,12 +88,26 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
     },
 
     resetGame: (isRandomLayout = false) => {
-      const newBoard = createBoard(isRandomLayout);
+      const currentState = get();
+      const boardSize = currentState.gameMode === 'easy' ? 10 : 15;
+      const newBoard = createBoard(isRandomLayout, boardSize);
 
       set({
         ...initialState,
         board: newBoard,
         isRandomLayout,
+        gameMode: currentState.gameMode,
+      });
+    },
+
+    setGameMode: (mode: 'easy' | 'hard') => {
+      const boardSize = mode === 'easy' ? 10 : 15;
+      const newBoard = createBoard(false, boardSize);
+
+      set({
+        ...initialState,
+        board: newBoard,
+        gameMode: mode,
       });
     },
   },
@@ -106,4 +122,8 @@ export const useBattleshipSunkShips = (): readonly string[] =>
   useBattleshipStore(state => state.sunkShips);
 export const useBattleshipIsRandomLayout = (): boolean =>
   useBattleshipStore(state => state.isRandomLayout);
+export const useBattleshipGameMode = (): 'easy' | 'hard' =>
+  useBattleshipStore(state => state.gameMode);
+export const useBattleshipBoardSize = (): number =>
+  useBattleshipStore(state => (state.gameMode === 'easy' ? 10 : 15));
 export const useBattleshipActions = () => useBattleshipStore(state => state.actions);

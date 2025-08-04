@@ -1,11 +1,12 @@
 import { Fragment, memo } from 'react';
 
 import { Cell } from '@/components';
-import { useBattleshipBoard } from '@/entities/board/store';
-import { BOARD_SIZE, COLUMN_LABELS, ROW_LABELS } from '@/shared/config/constants';
+import { useBattleshipBoard, useBattleshipBoardSize } from '@/entities/board/store';
+import { COLUMN_LABELS, ROW_LABELS } from '@/shared/config/constants';
 
 const GameBoard = () => {
   const board = useBattleshipBoard();
+  const boardSize = useBattleshipBoardSize();
 
   return (
     <div className='inline-block'>
@@ -17,12 +18,12 @@ const GameBoard = () => {
           md:gap-3
         `}
         style={{
-          gridTemplateColumns: `auto repeat(${BOARD_SIZE.toString()}, 1fr)`,
+          gridTemplateColumns: `auto repeat(${boardSize.toString()}, 1fr)`,
         }}
       >
         <div />
 
-        {COLUMN_LABELS.slice(0, BOARD_SIZE).map(label => (
+        {COLUMN_LABELS.slice(0, boardSize).map(label => (
           <div
             key={`col-${label}`}
             className={`

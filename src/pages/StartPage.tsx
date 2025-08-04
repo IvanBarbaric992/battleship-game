@@ -1,15 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components';
+import { useBattleshipActions } from '@/entities/board/store';
 
 const StartPage = () => {
   const navigate = useNavigate();
+  const { setGameMode } = useBattleshipActions();
 
   const handleEasyModeClick = () => {
+    setGameMode('easy');
     void navigate('/game');
   };
 
   const handleHardModeClick = () => {
+    setGameMode('hard');
     void navigate('/game');
   };
 
