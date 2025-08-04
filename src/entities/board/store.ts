@@ -6,8 +6,8 @@ import type { CellState } from '../../shared/lib/types';
 
 import {
   calculateAccuracy,
+  createBoard,
   createFixedShipsBoard,
-  createRandomShipsBoard,
   getTotalShipsCount,
   isShipCompletelyHit,
   isValidCoordinate,
@@ -86,7 +86,7 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
     },
 
     resetGame: (isRandomLayout = false) => {
-      const newBoard = isRandomLayout ? createRandomShipsBoard() : createFixedShipsBoard();
+      const newBoard = createBoard(isRandomLayout);
 
       set({
         ...initialState,

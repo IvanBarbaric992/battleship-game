@@ -29,33 +29,29 @@ const placeShipsOnBoard = (
 
 const createBoardWithShips = (
   shipLayout: { ship: string; positions: number[][] }[],
-  updateCacheFn: () => void,
 ): CellState[][] => {
   const board = createEmptyBoard();
-  updateCacheFn();
+  updateShipCache(shipLayout);
   placeShipsOnBoard(board, shipLayout);
   return board;
 };
 
-export const createFixedShipsBoard = (): CellState[][] =>
-  createBoardWithShips(shipsData.layout, updateShipCacheForFixedLayout);
+export const createFixedShipsBoard = (): CellState[][] => createBoardWithShips(shipsData.layout);
 
 const shipPositionsCache = new Map<string, readonly number[][]>();
-const shipPositionSetsCache = new Map<string, Set<string>>();
 const allShipTypes = Object.freeze(shipsData.layout.map(({ ship }) => ship));
 const totalShipsCount = shipsData.layout.length;
 
 const updateShipCache = (shipLayout: { ship: string; positions: number[][] }[]): void => {
   shipPositionsCache.clear();
-  shipPositionSetsCache.clear();
 
   // Populate cache with new positions
   shipLayout.forEach(({ ship, positions }) => {
     shipPositionsCache.set(ship, Object.freeze(positions as [number, number][]));
-    shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
   });
 };
 
+// Initialize with fixed layout
 updateShipCache(shipsData.layout);
 
 const calculateShipPositions = (
@@ -180,18 +176,11 @@ export const createRandomShipsBoard = (): CellState[][] => {
   // Clear cache and generate new layout
   shipLayoutCache = null;
   const shipLayout = generateRandomShipLayout();
-  return createBoardWithShips(shipLayout, () => {
-    updateShipCacheForRandomLayout(shipLayout);
-  });
+  return createBoardWithShips(shipLayout);
 };
 
-export const updateShipCacheForRandomLayout = (shipLayout: RandomPlacedShip[]): void => {
-  updateShipCache(shipLayout);
-};
-
-export const updateShipCacheForFixedLayout = (): void => {
-  updateShipCache(shipsData.layout);
-};
+export const createBoard = (isRandomLayout: boolean): CellState[][] =>
+  isRandomLayout ? createRandomShipsBoard() : createFixedShipsBoard();
 
 export const getShipPositions = (shipType: string): readonly number[][] =>
   shipPositionsCache.get(shipType) ?? Object.freeze([]);
