@@ -11,7 +11,12 @@ const LayoutSwitcher = ({ size = 'md' }: LayoutSwitcherProps) => {
   const { resetGame } = useBattleshipActions();
 
   return (
-    <div className='mb-6 flex justify-center gap-3'>
+    <div
+      className={`
+        mb-6 flex flex-col justify-center gap-3
+        sm:flex-row
+      `}
+    >
       <Button
         size={size}
         variant={!isRandomLayout ? 'primary' : 'secondary'}

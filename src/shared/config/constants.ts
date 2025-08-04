@@ -14,8 +14,8 @@ export const BATTLE_ICONS = {
 
 export const BOARD_SIZE = 10;
 
-export const COLUMN_LABELS = 'ABCDEFGHIJ'.split('');
-export const ROW_LABELS = Array.from({ length: BOARD_SIZE }, (_, i) => (i + 1).toString());
+export const COLUMN_LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+export const ROW_LABELS = Array.from({ length: 26 }, (_, i) => (i + 1).toString());
 
 export const PLACEMENT_PREFERENCES = {
   VERTICAL_PROBABILITY: 0.6,
