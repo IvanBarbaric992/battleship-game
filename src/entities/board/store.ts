@@ -10,7 +10,7 @@ import {
   getTotalShipsCount,
   isShipCompletelyHit,
   isValidCoordinate,
-  markShipAsSunkMutation,
+  markShipAsSunk,
 } from './lib';
 
 interface BattleshipState {
@@ -68,7 +68,7 @@ export const useBattleshipStore = create<BattleshipState>((set, get) => ({
           const isCurrentShipSunk = isShipCompletelyHit(cellSnapshot.shipType, draft.board);
 
           if (isCurrentShipSunk) {
-            markShipAsSunkMutation(cellSnapshot.shipType, draft.board);
+            markShipAsSunk(cellSnapshot.shipType, draft.board);
 
             if (!sunkShips.includes(cellSnapshot.shipType)) {
               draft.sunkShips.push(cellSnapshot.shipType);

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { produce } from 'immer';
-
 import { BOARD_SIZE } from '@/shared/config/constants';
 import type { CellState, ShipType } from '@/shared/lib/types';
 
@@ -28,36 +25,23 @@ export const createInitialBoard = (): CellState[][] => {
 };
 
 const shipPositionsCache = new Map<string, readonly number[][]>();
-const shipPositionSetsCache = new Map<string, Set<string>>();
-const allShipTypes = Object.freeze(shipsData.layout.map(({ ship }) => ship));
-const totalShipsCount = shipsData.layout.length;
 
 shipsData.layout.forEach(({ ship, positions }) => {
   shipPositionsCache.set(ship, Object.freeze(positions));
-  shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
 });
 
 export const getShipPositions = (shipType: string): readonly number[][] =>
-  shipPositionsCache.get(shipType) ?? Object.freeze([]);
+  shipPositionsCache.get(shipType) ?? [];
 
-export const getShipPositionSet = (shipType: string): Set<string> =>
-  shipPositionSetsCache.get(shipType) ?? new Set();
+export const getTotalShipsCount = (): number => shipsData.layout.length;
 
-export const getAllShipTypes = (): readonly string[] => allShipTypes;
-export const getTotalShipsCount = (): number => totalShipsCount;
-
-export const markShipAsSunkMutation = (shipType: string, draft: CellState[][]): void => {
+export const markShipAsSunk = (shipType: string, draft: CellState[][]): void => {
   const positions = getShipPositions(shipType);
 
   for (const [x, y] of positions) {
     draft[y][x].isShipSunk = true;
   }
 };
-
-export const markShipAsSunk = (shipType: string, board: CellState[][]): CellState[][] =>
-  produce(board, draft => {
-    markShipAsSunkMutation(shipType, draft);
-  });
 
 export const isShipCompletelyHit = (shipType: string, board: CellState[][]): boolean => {
   const shipPositions = getShipPositions(shipType);
