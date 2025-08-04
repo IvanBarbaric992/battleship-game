@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { produce } from 'immer';
-
 import { BOARD_SIZE, PLACEMENT_PREFERENCES } from '@/shared/config/constants';
 import { ShipDirection, type CellState, type ShipType } from '@/shared/lib/types';
 
 import shipsData from '../data/ships.json';
 
-const createEmptyBoard = (): CellState[][] =>
+export const createEmptyBoard = (): CellState[][] =>
   Array.from({ length: BOARD_SIZE }, () =>
     Array.from({ length: BOARD_SIZE }, () => ({
       isHit: false,
@@ -14,14 +12,11 @@ const createEmptyBoard = (): CellState[][] =>
     })),
   );
 
-export { createEmptyBoard };
-
-export const createFixedShipsBoard = (): CellState[][] => {
-  const board: CellState[][] = createEmptyBoard();
-
-  updateShipCacheForFixedLayout();
-
-  shipsData.layout.forEach(({ ship, positions }) => {
+const placeShipsOnBoard = (
+  board: CellState[][],
+  shipLayout: { ship: string; positions: number[][] }[],
+): void => {
+  shipLayout.forEach(({ ship, positions }) => {
     positions.forEach(([x, y]) => {
       board[y][x] = {
         isHit: false,
@@ -30,19 +25,55 @@ export const createFixedShipsBoard = (): CellState[][] => {
       };
     });
   });
+};
 
+const createBoardWithShips = (
+  shipLayout: { ship: string; positions: number[][] }[],
+  updateCacheFn: () => void,
+): CellState[][] => {
+  const board = createEmptyBoard();
+  updateCacheFn();
+  placeShipsOnBoard(board, shipLayout);
   return board;
 };
+
+export const createFixedShipsBoard = (): CellState[][] =>
+  createBoardWithShips(shipsData.layout, updateShipCacheForFixedLayout);
 
 const shipPositionsCache = new Map<string, readonly number[][]>();
 const shipPositionSetsCache = new Map<string, Set<string>>();
 const allShipTypes = Object.freeze(shipsData.layout.map(({ ship }) => ship));
 const totalShipsCount = shipsData.layout.length;
 
-shipsData.layout.forEach(({ ship, positions }) => {
-  shipPositionsCache.set(ship, Object.freeze(positions));
-  shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
-});
+const updateShipCache = (shipLayout: { ship: string; positions: number[][] }[]): void => {
+  shipPositionsCache.clear();
+  shipPositionSetsCache.clear();
+
+  // Populate cache with new positions
+  shipLayout.forEach(({ ship, positions }) => {
+    shipPositionsCache.set(ship, Object.freeze(positions as [number, number][]));
+    shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
+  });
+};
+
+updateShipCache(shipsData.layout);
+
+const calculateShipPositions = (
+  startX: number,
+  startY: number,
+  length: number,
+  direction: ShipDirection,
+): [number, number][] => {
+  const positions: [number, number][] = [];
+
+  for (let i = 0; i < length; i++) {
+    const x = direction === ShipDirection.HORIZONTAL ? startX + i : startX;
+    const y = direction === ShipDirection.VERTICAL ? startY + i : startY;
+    positions.push([x, y]);
+  }
+
+  return positions;
+};
 
 export const isShipPlacementValid = (
   startX: number,
@@ -51,16 +82,13 @@ export const isShipPlacementValid = (
   direction: ShipDirection,
   occupiedCells: Set<string>,
 ): boolean => {
-  const positions: [number, number][] = [];
+  const positions = calculateShipPositions(startX, startY, length, direction);
 
-  for (let i = 0; i < length; i++) {
-    const x = direction === ShipDirection.HORIZONTAL ? startX + i : startX;
-    const y = direction === ShipDirection.VERTICAL ? startY + i : startY;
-
+  // Check if all positions are valid coordinates
+  for (const [x, y] of positions) {
     if (!isValidCoordinate(x, y)) {
       return false;
     }
-    positions.push([x, y]);
   }
 
   // Check if positions are free and have buffer space
@@ -123,14 +151,12 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
       );
 
       if (isShipPlacementValid(startX, startY, size, direction, occupiedCells)) {
-        const positions: [number, number][] = [];
+        const positions = calculateShipPositions(startX, startY, size, direction);
 
-        for (let i = 0; i < size; i++) {
-          const x = direction === ShipDirection.HORIZONTAL ? startX + i : startX;
-          const y = direction === ShipDirection.VERTICAL ? startY + i : startY;
-          positions.push([x, y]);
+        // Add positions to occupied cells
+        positions.forEach(([x, y]) => {
           occupiedCells.add(`${x},${y}`);
-        }
+        });
 
         ships.push({ ship: shipType, positions });
         placed = true;
@@ -151,56 +177,24 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
 };
 
 export const createRandomShipsBoard = (): CellState[][] => {
-  const board = createEmptyBoard();
-  const shipLayout = generateRandomShipLayout();
-
-  // Update cache with random positions
-  updateShipCacheForRandomLayout(shipLayout);
-
-  shipLayout.forEach(({ ship, positions }) => {
-    positions.forEach(([x, y]) => {
-      board[y][x] = {
-        isHit: false,
-        hasShip: true,
-        shipType: ship as ShipType,
-      };
-    });
-  });
-
-  return board;
-};
-
-export const clearRandomShipCache = (): void => {
+  // Clear cache and generate new layout
   shipLayoutCache = null;
+  const shipLayout = generateRandomShipLayout();
+  return createBoardWithShips(shipLayout, () => {
+    updateShipCacheForRandomLayout(shipLayout);
+  });
 };
 
 export const updateShipCacheForRandomLayout = (shipLayout: RandomPlacedShip[]): void => {
-  // Clear existing cache
-  shipPositionsCache.clear();
-  shipPositionSetsCache.clear();
-
-  // Populate cache with random layout positions
-  shipLayout.forEach(({ ship, positions }) => {
-    shipPositionsCache.set(ship, Object.freeze(positions));
-    shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
-  });
+  updateShipCache(shipLayout);
 };
 
 export const updateShipCacheForFixedLayout = (): void => {
-  shipPositionsCache.clear();
-  shipPositionSetsCache.clear();
-
-  shipsData.layout.forEach(({ ship, positions }) => {
-    shipPositionsCache.set(ship, Object.freeze(positions));
-    shipPositionSetsCache.set(ship, new Set(positions.map(([x, y]) => `${x},${y}`)));
-  });
+  updateShipCache(shipsData.layout);
 };
 
 export const getShipPositions = (shipType: string): readonly number[][] =>
   shipPositionsCache.get(shipType) ?? Object.freeze([]);
-
-export const getShipPositionSet = (shipType: string): Set<string> =>
-  shipPositionSetsCache.get(shipType) ?? new Set();
 
 export const getAllShipTypes = (): readonly string[] => allShipTypes;
 
@@ -213,11 +207,6 @@ export const markShipAsSunkMutation = (shipType: string, draft: CellState[][]): 
     draft[y][x].isShipSunk = true;
   }
 };
-
-export const markShipAsSunk = (shipType: string, board: CellState[][]): CellState[][] =>
-  produce(board, draft => {
-    markShipAsSunkMutation(shipType, draft);
-  });
 
 export const isShipCompletelyHit = (shipType: string, board: CellState[][]): boolean => {
   const shipPositions = getShipPositions(shipType);
