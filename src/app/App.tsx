@@ -1,10 +1,12 @@
-import GamePage from '@/pages/GamePage';
+import { RouterProvider } from 'react-router-dom';
+
+import { routes } from '@/app/routes';
 import { usePreventScroll } from '@/shared/hooks';
 
 const App = () => {
   usePreventScroll();
 
-  return <GamePage />;
+  return <RouterProvider router={routes} />;
 };
 
 export default App;

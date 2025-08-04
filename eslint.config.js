@@ -208,7 +208,6 @@ export default tseslint.config(
       'no-eval': 'error',
       'no-implied-eval': 'error',
       'no-script-url': 'error',
-      'no-throw-literal': 'error',
       'no-useless-concat': 'error',
       'no-useless-return': 'error',
       'prefer-promise-reject-errors': 'error',

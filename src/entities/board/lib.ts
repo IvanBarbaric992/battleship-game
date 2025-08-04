@@ -67,7 +67,7 @@ const calculateShipPositions = (
   return positions;
 };
 
-export const isShipPlacementValid = (
+const isShipPlacementValid = (
   startX: number,
   startY: number,
   length: number,
@@ -166,17 +166,14 @@ export const generateRandomShipLayout = (): RandomPlacedShip[] => {
   return ships;
 };
 
-export const createRandomShipsBoard = (): CellState[][] => {
+export const createBoard = (isRandomLayout: boolean): CellState[][] => {
   shipLayoutCache = null;
-  const shipLayout = generateRandomShipLayout();
+  const shipLayout = isRandomLayout ? generateRandomShipLayout() : shipsData.layout;
   return createBoardWithShips(shipLayout);
 };
 
-export const createBoard = (isRandomLayout: boolean): CellState[][] =>
-  isRandomLayout ? createRandomShipsBoard() : createFixedShipsBoard();
-
-export const getShipPositions = (shipType: string): readonly number[][] =>
-  shipPositionsCache.get(shipType) ?? Object.freeze([]);
+const getShipPositions = (shipType: string): readonly number[][] =>
+  shipPositionsCache.get(shipType) ?? [];
 
 export const getTotalShipsCount = (): number => shipsData.layout.length;
 

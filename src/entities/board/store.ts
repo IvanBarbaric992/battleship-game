@@ -7,7 +7,6 @@ import type { CellState } from '../../shared/lib/types';
 import {
   calculateAccuracy,
   createBoard,
-  createFixedShipsBoard,
   getTotalShipsCount,
   isShipCompletelyHit,
   isValidCoordinate,
@@ -29,7 +28,7 @@ interface BattleshipState {
 }
 
 const initialState = {
-  board: createFixedShipsBoard(),
+  board: null,
   shots: 0,
   hits: 0,
   accuracy: 0,
@@ -40,6 +39,7 @@ const initialState = {
 
 export const useBattleshipStore = create<BattleshipState>((set, get) => ({
   ...initialState,
+  board: createBoard(false),
 
   actions: {
     fireShot: (x: number, y: number) => {
