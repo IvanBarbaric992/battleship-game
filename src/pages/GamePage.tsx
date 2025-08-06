@@ -20,23 +20,33 @@ const GamePage = () => {
   return (
     <div className='min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-4'>
       <div className='mx-auto max-w-4xl'>
-        <header className='relative mb-8 text-center'>
+        <header
+          className={`
+            relative mb-8 flex flex-col items-center justify-center text-center
+            md:flex-row
+          `}
+        >
           <Button
-            className='absolute top-0 left-0'
             variant='secondary'
+            className={`
+              mb-2 w-auto
+              md:absolute md:top-0 md:left-0 md:mb-0
+            `}
             onClick={() => void navigate('/')}
           >
             Game mode
           </Button>
-          <h1
-            className={`
-              mb-2 text-4xl font-bold text-blue-900
-              sm:text-5xl
-            `}
-          >
-            ⚓ Battleship
-          </h1>
-          <p className='text-lg text-blue-700'>Hunt down the enemy fleet!</p>
+          <div className='flex flex-col'>
+            <h1
+              className={`
+                mb-2 text-4xl font-bold text-blue-900
+                sm:text-5xl
+              `}
+            >
+              ⚓ Battleship
+            </h1>
+            <p className='text-lg text-blue-700'>Hunt down the enemy fleet!</p>
+          </div>
         </header>
 
         <Suspense fallback={<GameContentLoader message='Loading victory modal...' />}>
