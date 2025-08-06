@@ -50,7 +50,6 @@ const StartPage = () => {
           py-8
         `}
       >
-        {/* Header Section */}
         <div className='mb-12 text-center'>
           <div className='mb-6'>
             <span

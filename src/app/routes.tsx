@@ -1,8 +1,14 @@
+import { lazy, Suspense } from 'react';
+
 import { createBrowserRouter } from 'react-router-dom';
 
-import { ErrorBoundary, RootLayout } from '@/components';
-import GamePage from '@/pages/GamePage';
-import StartPage from '@/pages/StartPage';
+import { PageLoader } from '@/components/Loader';
+
+import ErrorBoundary from './ErrorBoundary';
+import RootLayout from './RootLayout';
+
+const StartPage = lazy(async () => await import('@/pages/StartPage'));
+const GamePage = lazy(async () => await import('@/pages/GamePage'));
 
 export const routes = createBrowserRouter([
   {
@@ -12,11 +18,19 @@ export const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: StartPage,
+        element: (
+          <Suspense fallback={<PageLoader message='Loading Battleship...' />}>
+            <StartPage />
+          </Suspense>
+        ),
       },
       {
         path: 'game',
-        Component: GamePage,
+        element: (
+          <Suspense fallback={<PageLoader showShipAnimation message='Setting up battlefield...' />}>
+            <GamePage />
+          </Suspense>
+        ),
       },
     ],
   },

@@ -2,9 +2,8 @@ import { memo } from 'react';
 
 import { useBattleshipActions, useBattleshipGameWon } from '@/entities/board/store';
 import { BATTLE_ICONS, COLUMN_LABELS } from '@/shared/config/constants';
-
-import type { CellState } from '../shared/lib/types';
-import { cn } from '../shared/lib/utils';
+import type { CellState } from '@/shared/lib/types';
+import { cn } from '@/shared/lib/utils';
 
 interface CellProps {
   state: CellState;

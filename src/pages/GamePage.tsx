@@ -1,10 +1,18 @@
+import { lazy, Suspense } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components';
-import { BattleField, LayoutSwitcher } from '@/features/battle-field';
-import GameInstructions from '@/features/game-instructions';
-import { BattleStats, VictoryModal } from '@/features/game-stats';
-import ShipFleet from '@/features/ship-fleet';
+import { GameContentLoader } from '@/components/Loader';
+import { LayoutSwitcher } from '@/features/battle-field';
+
+const BattleField = lazy(async () => await import('@/features/battle-field/BattleField'));
+const BattleStats = lazy(async () => await import('@/features/game-stats/BattleStats'));
+const ShipFleet = lazy(async () => await import('@/features/ship-fleet/ShipFleet'));
+const GameInstructions = lazy(
+  async () => await import('@/features/game-instructions/GameInstructions'),
+);
+const VictoryModal = lazy(async () => await import('@/features/game-stats/VictoryModal'));
 
 const GamePage = () => {
   const navigate = useNavigate();
@@ -31,17 +39,31 @@ const GamePage = () => {
           <p className='text-lg text-blue-700'>Hunt down the enemy fleet!</p>
         </header>
 
-        <VictoryModal />
+        <Suspense fallback={<GameContentLoader message='Loading victory modal...' />}>
+          <VictoryModal />
+        </Suspense>
 
         <div className={`col-span-full`}>
           <div className='mt-2 space-y-6'>
-            <BattleStats />
+            <Suspense fallback={<GameContentLoader message='Loading battle stats...' />}>
+              <BattleStats />
+            </Suspense>
+
             <div className='flex justify-center'>
               <LayoutSwitcher />
             </div>
-            <BattleField />
-            <ShipFleet />
-            <GameInstructions />
+
+            <Suspense fallback={<GameContentLoader message='Loading battle field...' />}>
+              <BattleField />
+            </Suspense>
+
+            <Suspense fallback={<GameContentLoader message='Loading ship fleet...' />}>
+              <ShipFleet />
+            </Suspense>
+
+            <Suspense fallback={<GameContentLoader message='Loading instructions...' />}>
+              <GameInstructions />
+            </Suspense>
           </div>
         </div>
       </div>
